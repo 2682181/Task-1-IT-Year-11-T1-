@@ -1,0 +1,406 @@
+using System;
+
+public class Program
+{
+	public static void Main()
+	{
+		bool running = true;
+		while (running)
+		{
+			Console.WriteLine("       ----- Main Menu ----- ");
+			Console.WriteLine("\n What Game Would You Like To Play? \n");
+			Console.WriteLine("Press 1 To Play Rock, Paper, Scissors (PVC)");
+			Console.WriteLine("Press 2 To Play Tic Tac Toe (PVP)");
+			Console.WriteLine("Press 3 To Play Feeling Lucky?");
+			Console.WriteLine("Press 4 To Leave The Game");
+			string GC = Console.ReadLine();
+			switch (GC)
+			{
+				case "1":
+					PlayRPS();
+					break;
+				case "2":
+					PlayTTT();
+					break;
+				case "3":
+					PlayFK();
+					break;
+				case "4":
+					PlayBYE();
+					running = false;
+					break;
+				default:
+					Console.WriteLine("Invalid selection. Please Try Again.");
+					break;
+			}
+		}
+
+		static void PlayRPS()
+		{
+			Console.WriteLine(" -----Welcome To Rock, Paper, Scissors---- ");
+			Console.WriteLine("Type Rock, Paper, or Scissors To Play");
+			Console.WriteLine("Press 'Q' at any time to return to Main Menu.\n");
+			Random RPSRNG = new Random();
+			while (true)
+			{
+				Console.Write("Your choice: ");
+				string input = Console.ReadLine().ToLower();
+				if (input == "q")
+				{
+					return;
+				}
+
+				if (input != "rock" && input != "paper" && input != "scissors")
+				{
+					Console.WriteLine("Invalid Input. Please Type either Rock, Paper Or Scissors To Play.\n");
+					continue;
+				}
+
+				int ComputerNum = RPSRNG.Next(1, 4);
+				string ComputerThird = "";
+				switch (ComputerNum)
+				{
+					case 1:
+						ComputerThird = "rock";
+						break;
+					case 2:
+						ComputerThird = "paper";
+						break;
+					case 3:
+						ComputerThird = "scissors";
+						break;
+				}
+
+				Console.WriteLine($"Computer chose: {ComputerThird}");
+				if (input == ComputerThird)
+				{
+					Console.WriteLine("It's a draw! \n");
+				}
+				else if ((input == "rock" && ComputerThird == "scissors") || (input == "paper" && ComputerThird == "rock") || (input == "scissors" && ComputerThird == "paper"))
+				{
+					Console.WriteLine("You win this round! \n");
+				}
+				else
+				{
+					Console.WriteLine("Computer wins this round! \n");
+				}
+			}
+		}
+	}
+
+	static void PlayTTT()
+	{
+		char[, ] TTTboard =
+		{
+			{
+				'1',
+				'2',
+				'3'
+			},
+			{
+				'4',
+				'5',
+				'6'
+			},
+			{
+				'7',
+				'8',
+				'9'
+			}
+		};
+		char TTTCurrentPlayer = 'X';
+		int moves = 0;
+		Console.WriteLine("  -----Welcome To Tic, Tac, Toe-----  ");
+		Console.WriteLine("Press 'Q' At Any Time To Return To Main Menu.\n");
+		while (true)
+		{
+			Console.WriteLine($" {TTTboard[0, 0]} | {TTTboard[0, 1]} | {TTTboard[0, 2]} ");
+			Console.WriteLine("---+---+---");
+			Console.WriteLine($" {TTTboard[1, 0]} | {TTTboard[1, 1]} | {TTTboard[1, 2]} ");
+			Console.WriteLine("---+---+---");
+			Console.WriteLine($" {TTTboard[2, 0]} | {TTTboard[2, 1]} | {TTTboard[2, 2]} \n");
+			Console.WriteLine($"Player {TTTCurrentPlayer}, choose a square (1-9):");
+			string TTTinput = Console.ReadLine();
+			if (TTTinput.ToLower() == "q")
+				return;
+			if (!int.TryParse(TTTinput, out int position) || position < 1 || position > 9)
+			{
+				Console.WriteLine("Invalid input. Please enter a number between 1 and 9.\n");
+				continue;
+			}
+
+			int row = (position - 1) / 3;
+			int col = (position - 1) % 3;
+			if (TTTboard[row, col] == 'X' || TTTboard[row, col] == 'O')
+			{
+				Console.WriteLine("That square is already taken. Choose another.\n");
+				continue;
+			}
+
+			TTTboard[row, col] = TTTCurrentPlayer;
+			moves++;
+			bool win = (TTTboard[0, 0] == TTTCurrentPlayer && TTTboard[0, 1] == TTTCurrentPlayer && TTTboard[0, 2] == TTTCurrentPlayer) || (TTTboard[1, 0] == TTTCurrentPlayer && TTTboard[1, 1] == TTTCurrentPlayer && TTTboard[1, 2] == TTTCurrentPlayer) || (TTTboard[2, 0] == TTTCurrentPlayer && TTTboard[2, 1] == TTTCurrentPlayer && TTTboard[2, 2] == TTTCurrentPlayer) || (TTTboard[0, 0] == TTTCurrentPlayer && TTTboard[1, 0] == TTTCurrentPlayer && TTTboard[2, 0] == TTTCurrentPlayer) || (TTTboard[0, 1] == TTTCurrentPlayer && TTTboard[1, 1] == TTTCurrentPlayer && TTTboard[2, 1] == TTTCurrentPlayer) || (TTTboard[0, 2] == TTTCurrentPlayer && TTTboard[1, 2] == TTTCurrentPlayer && TTTboard[2, 2] == TTTCurrentPlayer) || (TTTboard[0, 0] == TTTCurrentPlayer && TTTboard[1, 1] == TTTCurrentPlayer && TTTboard[2, 2] == TTTCurrentPlayer) || (TTTboard[0, 2] == TTTCurrentPlayer && TTTboard[1, 1] == TTTCurrentPlayer && TTTboard[2, 0] == TTTCurrentPlayer);
+			if (win)
+			{
+				Console.WriteLine($"Player {TTTCurrentPlayer} wins!\n");
+				Console.WriteLine("Play again? (Y/N)");
+				string again = Console.ReadLine().ToLower();
+				if (again == "y")
+				{
+					TTTboard = new char[, ]
+					{
+						{
+							'1',
+							'2',
+							'3'
+						},
+						{
+							'4',
+							'5',
+							'6'
+						},
+						{
+							'7',
+							'8',
+							'9'
+						}
+					};
+					TTTCurrentPlayer = 'X';
+					moves = 0;
+				}
+				else
+				{
+					return;
+				}
+			}
+
+			if (moves == 9)
+			{
+				Console.WriteLine("It's a draw!\n");
+				Console.WriteLine("Play again? (Y/N)");
+				string again = Console.ReadLine().ToLower();
+				if (again == "y")
+				{
+					TTTboard = new char[, ]
+					{
+						{
+							'1',
+							'2',
+							'3'
+						},
+						{
+							'4',
+							'5',
+							'6'
+						},
+						{
+							'7',
+							'8',
+							'9'
+						}
+					};
+					TTTCurrentPlayer = 'X';
+					moves = 0;
+					return;
+				}
+				else
+				{
+					continue;
+				}
+			}
+
+			if (TTTCurrentPlayer == 'X')
+			{
+				TTTCurrentPlayer = 'O';
+			}
+			else
+			{
+				TTTCurrentPlayer = 'X';
+			}
+		}
+	}
+
+	static void PlayFK()
+	{
+		bool running = true;
+		Console.WriteLine("----- Feeling Lucky! -----");
+		while (running)
+		{
+			Console.WriteLine("\nChoose a game:");
+			Console.WriteLine("1. Flip a coin");
+			Console.WriteLine("2. Roll a 6-sided die");
+			Console.WriteLine("3. Guess a day of the week");
+			Console.WriteLine("4. Guess a month");
+			Console.WriteLine("5. Roll a 20-sided die");
+			Console.WriteLine("6. Guess a card");
+			Console.WriteLine("Q. Quit back to main menu");
+			Console.Write("Your choice: ");
+			string choice = Console.ReadLine().ToLower();
+			switch (choice)
+			{
+				case "1":
+					PlayCoinGame();
+					break;
+				case "2":
+					PlayDie6Game();
+					break;
+				case "3":
+					GuessDay();
+					break;
+				case "4":
+					GuessMonth();
+					break;
+				case "5":
+					PlayDie20Game();
+					break;
+				case "6":
+					GuessCard();
+					break;
+				case "q":
+					running = false;
+					break;
+				default:
+					Console.WriteLine("Invalid choice. Try again.");
+					break;
+			}
+		}
+	}
+
+	static void PlayCoinGame()
+	{
+		string result;
+		Random rng = new Random();
+		Console.Write("Guess the coin flip (Heads/Tails): ");
+		string guess = Console.ReadLine().ToLower();
+		int side = rng.Next(0, 2);
+		if (side == 0)
+		{
+			result = "heads";
+		}
+		else
+		{
+			result = "tails";
+		}
+
+		if (guess != "tails" && guess != "heads")
+		{
+			Console.WriteLine("Please Write only 'heads' or 'tails'");
+			PlayCoinGame();
+		}
+
+		if (result == guess)
+		{
+			Console.WriteLine($"\nNice Guess, the coin landed on {result}");
+		}
+		else if (result != guess)
+		{
+			Console.WriteLine($"\nBetter Luck next time, the coin landed on {result}");
+		}
+	}
+
+	static void PlayDie6Game()
+	{
+		Random rng = new Random();
+		Console.Write("Guess the roll of a 6-sided die (1-6): ");
+		int guess;
+		if (!int.TryParse(Console.ReadLine(), out guess) || guess < 1 || guess > 6)
+		{
+			Console.WriteLine("Invalid input.");
+			return;
+		}
+
+		int roll = rng.Next(1, 7);
+		Console.WriteLine($"\nThe die rolled {roll}.");
+	}
+
+	static void PlayDie20Game()
+	{
+		Random rng = new Random();
+		Console.Write("Guess the roll of a 20-sided die (1-20): ");
+		int guess;
+		if (!int.TryParse(Console.ReadLine(), out guess) || guess < 1 || guess > 20)
+		{
+			Console.WriteLine("Invalid input.");
+			return;
+		}
+
+		int roll = rng.Next(1, 21);
+		Console.WriteLine($"\nThe die rolled {roll}.");
+	}
+
+	static void GuessDay()
+	{
+		string[] days =
+		{
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday",
+			"Sunday"
+		};
+		Random rng = new Random();
+		string answer = days[rng.Next(0, 7)];
+		Console.Write("Guess a day of the week: ");
+		Console.ReadLine();
+		Console.WriteLine($"\nThe day was {answer}.");
+	}
+
+	static void GuessMonth()
+	{
+		string[] months =
+		{
+			"January",
+			"February",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"November",
+			"December"
+		};
+		Random rng = new Random();
+		string answer = months[rng.Next(0, 12)];
+		Console.Write("Guess a month: ");
+		Console.ReadLine();
+		Console.WriteLine($"\nThe month was {answer}.");
+	}
+
+	static void GuessCard()
+	{
+		Random rng = new Random();
+		int CardNum = rng.Next(1, 14);
+		string[] suits =
+		{
+			"Hearts",
+			"Diamonds",
+			"Clubs",
+			"Spades"
+		};
+		string suit = suits[rng.Next(0, 4)];
+		string card;
+		if (CardNum == 1)
+			card = "Ace";
+		else if (CardNum == 11)
+			card = "Jack";
+		else if (CardNum == 12)
+			card = "Queen";
+		else if (CardNum == 13)
+			card = "King";
+		else
+			card = CardNum.ToString();
+		Console.Write("Guess a card e.g(3 Diamonds): ");
+		Console.ReadLine();
+		Console.WriteLine($"\nThe card was {card} of {suit}.");
+	}
+
+	static void PlayBYE()
+	{
+		Console.WriteLine("Thank You For Playing, See You Next Time :)");
+	}
+}
