@@ -239,10 +239,10 @@ public class Program
 			switch (choice)
 			{
 				case "1":
-					PlayCoinGame();
+					GuessCoin();
 					break;
 				case "2":
-					PlayDie6Game();
+					Guess6Dice();
 					break;
 				case "3":
 					GuessDay();
@@ -251,7 +251,7 @@ public class Program
 					GuessMonth();
 					break;
 				case "5":
-					PlayDie20Game();
+					Guess20Dice();
 					break;
 				case "6":
 					GuessCard();
@@ -266,7 +266,7 @@ public class Program
 		}
 	}
 
-	static void PlayCoinGame()
+	static void GuessCoin()
 	{
 		string result;
 		Random rng = new Random();
@@ -285,7 +285,7 @@ public class Program
 		if (guess != "tails" && guess != "heads")
 		{
 			Console.WriteLine("Please Write only 'heads' or 'tails'");
-			PlayCoinGame();
+			GuessCoin();
 		}
 
 		if (result == guess)
@@ -298,7 +298,7 @@ public class Program
 		}
 	}
 
-	static void PlayDie6Game()
+	static void Guess6Dice()
 	{
 		Random rng = new Random();
 		Console.Write("Guess the roll of a 6-sided die (1-6): ");
@@ -313,7 +313,7 @@ public class Program
 		Console.WriteLine($"\nThe die rolled {roll}.");
 	}
 
-	static void PlayDie20Game()
+	static void Guess20Dice()
 	{
 		Random rng = new Random();
 		Console.Write("Guess the roll of a 20-sided die (1-20): ");
